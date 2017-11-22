@@ -13,6 +13,7 @@ var bcrypt = require('bcrypt-nodejs');
 var async = require('async');
 var crypto = require('crypto');
 
+//MongoDB document model for user schema
 var userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
@@ -21,6 +22,7 @@ var userSchema = new mongoose.Schema({
   resetPasswordExpires: Date
 });
 
+//Mongoose middleware to has a password on save()
 userSchema.pre('save', function(next) {
   var user = this;
   var SALT_FACTOR = 5;
@@ -38,6 +40,7 @@ userSchema.pre('save', function(next) {
   });
 });
 
+//Mongoose instance method for password verification
 userSchema.methods.comparePassword = function(candidatePassword, cb) {
   bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
     if (err) return cb(err);
@@ -46,6 +49,8 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
 };
 
 var User = mongoose.model('User', userSchema);
+
+
 
 var app = express();
 
@@ -58,7 +63,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.use(session({ secret: 'session secret key' }));
+app.use(session({ secret: 'session secret key' })); //session middleware
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
