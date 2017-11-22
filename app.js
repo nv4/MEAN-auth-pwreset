@@ -50,8 +50,7 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
 
 var User = mongoose.model('User', userSchema);
 
-
-
+mongoose.connect('localhost'); //connect to local MongoDB
 var app = express();
 
 // Middleware
