@@ -169,7 +169,7 @@ app.post('/forgot', function(req, res, next) {
     function(token, done) {
       User.findOne({ email: req.body.email }, function(err, user) {
         if (!user) {
-          req.flash('error', 'No account with that email address exists.');
+          req.flash('error', 'Account not found!');
           return res.redirect('/forgot');
         }
 
@@ -183,15 +183,15 @@ app.post('/forgot', function(req, res, next) {
     },
     function(token, user, done) {
       var smtpTransport = nodemailer.createTransport('SMTP', {
-        service: 'SendGrid',
+        service: 'Gmail',
         auth: {
-          user: '!!! YOUR SENDGRID USERNAME !!!',
-          pass: '!!! YOUR SENDGRID PASSWORD !!!'
+          user: 'nv27.ghome@gmail.com',
+          pass: '59rat1ug'
         }
       });
       var mailOptions = {
         to: user.email,
-        from: 'passwordreset@demo.com',
+        from: 'nodemailer-pw-reset@demo.com',
         subject: 'Node.js Password Reset',
         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
