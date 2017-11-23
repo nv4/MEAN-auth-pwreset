@@ -12,6 +12,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('bcrypt-nodejs');
 var async = require('async');
 var crypto = require('crypto');
+var flash = require('express-flash');
 
 //MongoDB document model for user schema
 var userSchema = new mongoose.Schema({
@@ -88,6 +89,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(session({ secret: 'session secret key' })); //session middleware
+app.use(flash());
 
 //Passport middleware
 app.use(passport.initialize());
