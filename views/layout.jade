@@ -31,7 +31,9 @@ html
           ul.nav.navbar-nav.navbar-right
             if user
               li
-                a(href='/logout') Logout
+                a(href='/logout')
+                span.glyphicon.glyphicon-log-out
+                |   Logout
             else
               li
                 a(href='/login')

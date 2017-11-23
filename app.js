@@ -179,11 +179,18 @@ app.post('/forgot', function(req, res, next) {
       });
     },
     function(token, user, done) {
-      var smtpTransport = nodemailer.createTransport('SMTP', {
-        service: 'Gmail',
+      // var smtpTransport = nodemailer.createTransport('SMTP', {
+      //   service: 'Gmail',
+      //   auth: {
+      //     user: 'nv27.ghome@gmail.com',
+      //     pass: '59rat1ug'
+      //   }
+      // });
+      var smtpTransport = nodemailer.createTransport({
+        service: 'DebugMail',
         auth: {
           user: 'nv27.ghome@gmail.com',
-          pass: '59rat1ug'
+          pass: '66a3de50-d017-11e7-a84d-afd26e8d1401'
         }
       });
       var mailOptions = {
