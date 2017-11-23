@@ -8,25 +8,30 @@ html
     script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
   body
     .navbar.navbar-inverse.navbar-static-top(role='navigation')
-      .container
+      .container-fluid
         .navbar-header
           button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
             span.sr-only Toggle navigation
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand(href='/') Project name
+          a.navbar-brand(href='/') MEAN Project
         .collapse.navbar-collapse
           ul.nav.navbar-nav
             li.active
               a(href='/') Home
+          ul.nav.navbar-nav.navbar-right
             if user
               li
                 a(href='/logout') Logout
             else
               li
-                a(href='/login') Login
+                a(href='/login')
+                  span.glyphicon.glyphicon-log-in
+                  |   Login
               li
-                a(href='/signup') Signup
-    .container
+                a(href='/signup')
+                  span.glyphicon.glyphicon-user
+                  |   Sign up
+    .container-fluid
       block content
