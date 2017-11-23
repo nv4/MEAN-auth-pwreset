@@ -120,9 +120,19 @@ app.post('/login', function(req, res, next) {
     }
     req.logIn(user, function(err) {
       if (err) return next(err);
-      return res.redirect('/');
+      return res.redirect('/profile');
     });
   })(req, res, next);
+});
+
+app.get('/profile', function(req, res) {
+  if (!req.user) return res.redirect('/');
+  res.render('profile', {
+    title: 'MEAN Authentication Project',
+    user: req.user,
+    username: req.user.username,
+    email: req.user.email
+  });
 });
 
 app.get('/signup', function(req, res) {
