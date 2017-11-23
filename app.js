@@ -148,10 +148,6 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-app.listen(app.get('port'), function() {
-  console.log('Express server listening on port ' + app.get('port'));
-});
-
 app.get('/forgot', function(req, res) {
   res.render('forgot', {
     user: req.user
@@ -207,4 +203,9 @@ app.post('/forgot', function(req, res, next) {
     if (err) return next(err);
     res.redirect('/forgot');
   });
+});
+
+
+app.listen(app.get('port'), function() {
+  console.log('Express server listening on port ' + app.get('port'));
 });
