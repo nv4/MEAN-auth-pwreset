@@ -62,7 +62,7 @@ passport.deserializeUser(function(id, done) {
 });
 
 // setup local strategy for authentication
-passport.use('local-login', new LocalStrategy(function(username, password, done) {
+passport.use(new LocalStrategy(function(username, password, done) {
   User.findOne({ username: username }, function(err, user) {
     if (err) return done(err);
     if (!user) return done(null, false, { message: 'Incorrect username.' });
@@ -75,49 +75,6 @@ passport.use('local-login', new LocalStrategy(function(username, password, done)
     });
   });
 }))
-
-passport.use('local-signup', new LocalStrategy({
-  // by default, local strategy uses username and password, we will override with email
-  usernameField : 'email',
-  passwordField : 'password',
-  passReqToCallback : true // allows us to pass back the entire request to the callback
-},
-function(req, email, password, done) {
-
-  // asynchronous
-  // User.findOne wont fire unless data is sent back
-  process.nextTick(function() {
-
-    // find a user whose email is the same as the forms email
-    // we are checking to see if the user trying to login already exists
-    User.findOne({ 'local.email' :  email }, function(err, user) {
-      // if there are any errors, return the error
-      if (err)
-      return done(err);
-
-      // check to see if theres already a user with that email
-      if (user) {
-        return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
-      } else {
-
-        // if there is no user with that email
-        // create the user
-        var newUser            = new User();
-
-        // set the user's local credentials
-        newUser.local.email    = email;
-        newUser.local.password = newUser.generateHash(password);
-
-        // save the user
-        newUser.save(function(err) {
-          if (err)
-          throw err;
-          return done(null, newUser);
-        });
-      }
-    });
-  });
-}));
 
 mongoose.connect('localhost'); //connect to local MongoDB
 var app = express();
@@ -155,7 +112,7 @@ app.get('/login', function(req, res) {
 });
 
 app.post('/login', function(req, res, next) {
-  passport.authenticate('local-login', function(err, user, info) {
+  passport.authenticate('local', function(err, user, info) {
     if (err) return next(err)
     if (!user) {
       req.flash('error', 'Invalid credentials! Please try again.');
@@ -163,6 +120,7 @@ app.post('/login', function(req, res, next) {
     }
     req.logIn(user, function(err) {
       if (err) return next(err);
+      req.flash('success', 'You have successfully logged in.');
       return res.redirect('/profile');
     });
   })(req, res, next);
@@ -185,33 +143,86 @@ app.get('/signup', function(req, res) {
 });
 
 app.post('/signup', function(req, res) {
-  // User.findOne({ username: req.body.username }, function(err, uname) {
-  //   if (uname) {
-  //     req.flash('error', 'Username is already taken!');
-  //     return res.redirect('/signup');
-  //   }
-  // });
-  // User.findOne({ email: req.body.email }, function(err, emailfound) {
-  //   if (emailfound) {
-  //     req.flash('error', 'Account already exists with this email!');
-  //     return res.redirect('/signup');
-  //   }
-  // });
-  if (req.body.confirm != req.body.password) {
-    req.flash('error', 'Password confirmation mismatch!');
-    return res.redirect('/signup');
-  }
-  var user = new User({
-      username: req.body.username,
-      email: req.body.email,
-      password: req.body.password
-    });
-  user.save(function(err) {
-    req.logIn(user, function(err) {
-      res.redirect('/profile');
+  // var unamefound = false;
+  User.findOne({ username: req.body.username }, function(err, username) {
+    if (username) {
+      req.flash('error', 'Username is already taken!');
+      return res.redirect('/signup');
+    }
+    else
+    User.findOne({ email: req.body.email }, function(err, email) {
+      if (email) {
+        req.flash('error', 'Account already exists with this email!');
+        return res.redirect('/signup');
+      }
+      else if (req.body.confirm != req.body.password) {
+        req.flash('error', 'Password confirmation mismatch!');
+        return res.redirect('/signup');
+      }
+      else {
+        var user = new User({
+            username: req.body.username,
+            email: req.body.email,
+            password: req.body.password
+          });
+        user.save(function(err) {
+          req.logIn(user, function(err) {
+            req.flash('success', 'You have successfully registered.');
+            res.redirect('/profile');
+          });
+        });
+      };
     });
   });
+  // if (unamefound) {
+  //   req.flash('error', 'Username is already taken!');
+  //   return res.redirect('/signup');
+  // }
+  // else if (emailfound) {
+  //   req.flash('error', 'Account already exists with this email!');
+  //   return res.redirect('/signup');
+  // }
 });
+
+// app.post('/signup', function(req, res) {
+//   async.waterfall([
+//     function(done) {
+//       User.findOne({ username: req.body.username }, function(err, unamefound) {
+//         if (unamefound) {
+//           req.flash('error', 'Username is already taken!');
+//           return res.redirect('/signup');
+//         }
+//         var uname_nf = !unamefound;
+//         done(err, uname_nf);
+//       });
+//     },
+//     function(uname_nf, done) {
+//       User.findOne({ email: req.body.email }, function(err, emailfound) {
+//         if (emailfound) {
+//           req.flash('error', 'Account already exists with this email!');
+//           return res.redirect('/signup');
+//         }
+//         done(err);
+//       });
+//     }
+//   ], function(err) {
+//     if (err) return next(err);
+//   });
+//   // if (req.body.confirm != req.body.password) {
+//   //   req.flash('error', 'Password confirmation mismatch!');
+//   //   return res.redirect('/signup');
+//   // }
+//   var user = new User({
+//       username: req.body.username,
+//       email: req.body.email,
+//       password: req.body.password
+//     });
+//   user.save(function(err) {
+//     req.logIn(user, function(err) {
+//       res.redirect('/profile');
+//     });
+//   });
+// });
 
 app.get('/logout', function(req, res){
   req.logout();
