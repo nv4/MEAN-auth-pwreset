@@ -23,7 +23,7 @@ var userSchema = new mongoose.Schema({
   resetPasswordExpires: Date
 });
 
-//Mongoose middleware to has a password on save()
+//Mongoose middleware to hash a password on save()
 userSchema.pre('save', function(next) {
   var user = this;
   var SALT_FACTOR = 5;
@@ -62,7 +62,7 @@ passport.deserializeUser(function(id, done) {
 });
 
 // setup local strategy for authentication
-passport.use(new LocalStrategy(function(username, password, done) {
+passport.use('local-login', new LocalStrategy(function(username, password, done) {
   User.findOne({ username: username }, function(err, user) {
     if (err) return done(err);
     if (!user) return done(null, false, { message: 'Incorrect username.' });
@@ -112,7 +112,7 @@ app.get('/login', function(req, res) {
 });
 
 app.post('/login', function(req, res, next) {
-  passport.authenticate('local', function(err, user, info) {
+  passport.authenticate('local-login', function(err, user, info) {
     if (err) return next(err)
     if (!user) {
       req.flash('error', 'Invalid credentials! Please try again.');
@@ -142,6 +142,18 @@ app.get('/signup', function(req, res) {
 });
 
 app.post('/signup', function(req, res) {
+  // User.findOne({ username: req.body.username }, function(err, uname) {
+  //   if (uname) {
+  //     req.flash('error', 'Username is already taken!');
+  //     return res.redirect('/signup');
+  //   }
+  // });
+  // User.findOne({ email: req.body.email }, function(err, emailfound) {
+  //   if (emailfound) {
+  //     req.flash('error', 'Account already exists with this email!');
+  //     return res.redirect('/signup');
+  //   }
+  // });
   if (req.body.confirm != req.body.password) {
     req.flash('error', 'Password confirmation mismatch!');
     return res.redirect('/signup');
@@ -193,13 +205,6 @@ app.post('/forgot', function(req, res, next) {
       });
     },
     function(token, user, done) {
-      // var smtpTransport = nodemailer.createTransport('SMTP', {
-      //   service: 'Gmail',
-      //   auth: {
-      //     user: 'nv27.ghome@gmail.com',
-      //     pass: '59rat1ug'
-      //   }
-      // });
       var smtpTransport = nodemailer.createTransport({
         service: 'DebugMail',
         auth: {
