@@ -122,6 +122,12 @@ app.post('/login', function(req, res, next) {
   })(req, res, next);
 });
 
+app.get('/signup', function(req, res) {
+  res.render('signup', {
+    user: req.user
+  });
+});
+
 app.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));
 });
