@@ -174,55 +174,7 @@ app.post('/signup', function(req, res) {
       };
     });
   });
-  // if (unamefound) {
-  //   req.flash('error', 'Username is already taken!');
-  //   return res.redirect('/signup');
-  // }
-  // else if (emailfound) {
-  //   req.flash('error', 'Account already exists with this email!');
-  //   return res.redirect('/signup');
-  // }
 });
-
-// app.post('/signup', function(req, res) {
-//   async.waterfall([
-//     function(done) {
-//       User.findOne({ username: req.body.username }, function(err, unamefound) {
-//         if (unamefound) {
-//           req.flash('error', 'Username is already taken!');
-//           return res.redirect('/signup');
-//         }
-//         var uname_nf = !unamefound;
-//         done(err, uname_nf);
-//       });
-//     },
-//     function(uname_nf, done) {
-//       User.findOne({ email: req.body.email }, function(err, emailfound) {
-//         if (emailfound) {
-//           req.flash('error', 'Account already exists with this email!');
-//           return res.redirect('/signup');
-//         }
-//         done(err);
-//       });
-//     }
-//   ], function(err) {
-//     if (err) return next(err);
-//   });
-//   // if (req.body.confirm != req.body.password) {
-//   //   req.flash('error', 'Password confirmation mismatch!');
-//   //   return res.redirect('/signup');
-//   // }
-//   var user = new User({
-//       username: req.body.username,
-//       email: req.body.email,
-//       password: req.body.password
-//     });
-//   user.save(function(err) {
-//     req.logIn(user, function(err) {
-//       res.redirect('/profile');
-//     });
-//   });
-// });
 
 app.get('/logout', function(req, res){
   req.logout();
