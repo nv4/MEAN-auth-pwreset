@@ -2,5 +2,11 @@ extends layout
 
 block content
   h1 #{title}
-  h3 Homepage landing
-  p Welcome to #{title}
+  h3 Welcome to the homepage.
+  if user
+    p You are logged in!
+    button.btn.btn-primary(href='/profile')
+      span.glyphicon.glyphicon-user
+      |   View Profile
+  else
+    p Not authenticated. Login from the navbar.

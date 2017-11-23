@@ -36,6 +36,10 @@ html
                 a(href='/logout')
                   span.glyphicon.glyphicon-log-out
                   |   Logout
+              li
+                a(href='/profile')
+                  span.glyphicon.glyphicon-user
+                  |   Profile
             else
               li
                 a(href='/login')
@@ -43,7 +47,7 @@ html
                   |   Login
               li
                 a(href='/signup')
-                  span.glyphicon.glyphicon-user
+                  span.glyphicon.glyphicon-cloud
                   |   Register
     .container
       if messages.error
