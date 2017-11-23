@@ -134,12 +134,16 @@ app.post('/signup', function(req, res) {
       email: req.body.email,
       password: req.body.password
     });
-
   user.save(function(err) {
     req.logIn(user, function(err) {
       res.redirect('/');
     });
   });
+});
+
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
 });
 
 app.listen(app.get('port'), function() {
