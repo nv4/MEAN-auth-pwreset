@@ -2,7 +2,7 @@ extends layout
 
 block content
   form(method='POST')
-    legend Signup
+    legend Registration
     .form-group
       label(for='username') Username
       input.form-control(type='text', name='username', autofocus)
@@ -12,7 +12,7 @@ block content
     .form-group
       label(for='password') Name
       input.form-control(type='password', name='password')
-    button.btn.btn-primary(type="submit") Signup
+    button.btn.btn-primary(type="submit") Register
 
     //-   Check out "express-validator" before enabling password confirmation field: https://github.com/ctavan/express-validator
     //-    .form-group
