@@ -33,5 +33,14 @@ html
                 a(href='/signup')
                   span.glyphicon.glyphicon-user
                   |   Sign up
-    .container-fluid
+    .container
+      if messages.error
+        .alert.alert-danger
+          div= messages.error
+      if messages.info
+        .alert.alert-info
+          div= messages.info
+      if messages.success
+        .alert.alert-success
+          div= messages.success
       block content
