@@ -116,7 +116,7 @@ app.post('/login', function(req, res, next) {
     if (err) return next(err)
     if (!user) {
       req.flash('error', 'Invalid credentials! Please try again.');
-      return res.redirect('/login')
+      return res.redirect('/login');
     }
     req.logIn(user, function(err) {
       if (err) return next(err);
@@ -132,6 +132,10 @@ app.get('/signup', function(req, res) {
 });
 
 app.post('/signup', function(req, res) {
+  if (req.body.confirm != req.body.password) {
+    req.flash('error', 'Password confirmation mismatch!');
+    return res.redirect('/signup');
+  }
   var user = new User({
       username: req.body.username,
       email: req.body.email,
@@ -246,11 +250,11 @@ app.post('/reset/:token', function(req, res) {
       });
     },
     function(user, done) {
-      var smtpTransport = nodemailer.createTransport('SMTP', {
-        service: 'Gmail',
+      var smtpTransport = nodemailer.createTransport({
+        service: 'DebugMail',
         auth: {
           user: 'nv27.ghome@gmail.com',
-          pass: '59rat1ug'
+          pass: '66a3de50-d017-11e7-a84d-afd26e8d1401'
         }
       });
       var mailOptions = {

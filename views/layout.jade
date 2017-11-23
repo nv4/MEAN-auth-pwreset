@@ -10,7 +10,7 @@ html
       $(function(){
           $('a').each(function(){
               if ($(this).prop('href') == window.location.href) {
-                  $(this).addClass('active'); $(this).parents('li').addClass('active');
+                  $(this).addClass('active'); $(this).closest('li').addClass('active');
               }
           });
       });    
@@ -32,8 +32,8 @@ html
             if user
               li
                 a(href='/logout')
-                span.glyphicon.glyphicon-log-out
-                |   Logout
+                  span.glyphicon.glyphicon-log-out
+                  |   Logout
             else
               li
                 a(href='/login')
