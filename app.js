@@ -239,10 +239,10 @@ app.post('/reset/:token', function(req, res) {
     },
     function(user, done) {
       var smtpTransport = nodemailer.createTransport('SMTP', {
-        service: 'SendGrid',
+        service: 'Gmail',
         auth: {
-          user: '!!! YOUR SENDGRID USERNAME !!!',
-          pass: '!!! YOUR SENDGRID PASSWORD !!!'
+          user: 'nv27.ghome@gmail.com',
+          pass: '59rat1ug'
         }
       });
       var mailOptions = {
